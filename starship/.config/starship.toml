@@ -1,0 +1,24 @@
+# Use custom symbols (Nerd Font required)
+format = """
+[┌───────────────────>](bold green)
+[│](bold green) $directory$git_branch$git_status$python$lua
+[└─>](bold green) """
+
+[directory]
+style = "bold cyan"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = " "
+style = "bold turquoise"
+format = "on [$symbol$branch]($style) "
+
+[python]
+symbol = " "
+style = "bold lime"
+format = "via [$symbol$version]($style) "
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
