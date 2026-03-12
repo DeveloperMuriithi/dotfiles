@@ -1,0 +1,11 @@
+ncat
+nmap
+metasploit
+wireshark
+tcpdump
+hashcat
+john
+gobuster
+ffuf
+dirsearch
+

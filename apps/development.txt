@@ -1,0 +1,12 @@
+VS Code
+git
+python
+pipx
+node
+npm
+docker
+docker-compose
+lazygit
+ripgrep
+fd
+tmux

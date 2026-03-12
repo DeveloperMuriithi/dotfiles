@@ -1,0 +1,9 @@
+Spotify
+Deskflow
+LocalSend
+NVim
+GIMP
+Obsidian
+Sublime Text
+Zen Browser
+

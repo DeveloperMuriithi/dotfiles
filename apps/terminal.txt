@@ -1,0 +1,9 @@
+kitty
+starship
+zoxide
+bat
+eza
+fzf
+btop
+neovim
+
