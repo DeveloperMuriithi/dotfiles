@@ -7,7 +7,7 @@
 
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME=""   # ignored, using Starship + P10k
+# ZSH_THEME="powerlevel10k/powerlevel10k"   # ignored, using Starship + P10k
 ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
@@ -35,3 +35,4 @@ fi
 # pyenv interactive shell init
 eval "$(pyenv init -)"
 
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
