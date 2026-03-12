@@ -1,0 +1,7 @@
+# SSH keys
+id_ed25519
+id_ed25519.pub
+
+# Credentials
+.git-credentials
+.env

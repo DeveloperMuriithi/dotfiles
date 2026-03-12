@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # -------------------------
 # ~/.zshrc – interactive shell
 # -------------------------
@@ -35,4 +42,11 @@ fi
 # pyenv interactive shell init
 eval "$(pyenv init -)"
 
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+# Portable Powerlevel10k loader
+for p10k in \
+  /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
+  /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme \
+  /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+do
+  [[ -f $p10k ]] && source $p10k && break
+done
