@@ -14,9 +14,39 @@ fi
 
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
+export TERM="xterm-256color"
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
+export ZSH_HIGHLIGHT_STYLES[command]='fg=#00ff00'
+export ZSH_HIGHLIGHT_STYLES[unknown-command]='fg=#ff5555,bold'
+
 # ZSH_THEME="powerlevel10k/powerlevel10k"   # ignored, using Starship + P10k
 ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+
+#zsh_syntax_highlighting
+# Use a shades-of-green palette
+typeset -A ZSH_HIGHLIGHT_STYLES
+
+# Commands
+ZSH_HIGHLIGHT_STYLES[command]='fg=#00ff00'          # bright neon green
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=#00cc00'          # darker green for builtins (cd, pwd)
+ZSH_HIGHLIGHT_STYLES[alias]='fg=#00aa00'            # dark green for aliases
+ZSH_HIGHLIGHT_STYLES[function]='fg=#33ff33'         # bright green for functions
+ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#22cc22,bold' # medium green for keywords (if, then)
+ZSH_HIGHLIGHT_STYLES[option]='fg=#66ff66'           # lime/bright green for flags/options
+ZSH_HIGHLIGHT_STYLES[unknown-command]='fg=#ff5555,bold' # red for invalid commands
+
+# Files & directories
+ZSH_HIGHLIGHT_STYLES[dir]='fg=#33ffff,bold'         # cyan bold for directories
+ZSH_HIGHLIGHT_STYLES[path]='fg=#33ffff'             # cyan for normal files
+ZSH_HIGHLIGHT_STYLES[precommand]='fg=#ff55ff'      # magenta for hidden files
+ZSH_HIGHLIGHT_STYLES[number]='fg=#aaff00'          # yellow-green for numbers
+ZSH_HIGHLIGHT_STYLES[string]='fg=#00ffff'          # cyan-blue for strings
+ZSH_HIGHLIGHT_STYLES[comment]='fg=#888888'         # gray for comments
+
+# Cursor feedback on invalid input
+ZSH_HIGHLIGHT_STYLES[default]='fg=#00ff00'         # fallback: bright green
+
 source $ZSH/oh-my-zsh.sh
 
 # Starship prompt

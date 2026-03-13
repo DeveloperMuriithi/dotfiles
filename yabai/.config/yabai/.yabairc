@@ -1,0 +1,1 @@
+n1ghtw1ng ALL=(root) NOPASSWD: sha256:74319e10060b8c784f4ba118d7902b2a0e76aef523f6c3e0a3d5b71e991f6cd4 /usr/local/bin/yabai --load-sa
