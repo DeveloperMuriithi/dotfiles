@@ -16,6 +16,8 @@ fi
 export ZSH="$HOME/.oh-my-zsh"
 export TERM="xterm-256color"
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
+typeset -A ZSH_HIGHLIGHT_STYLES  # ensure it’s an associative array
+ZSH_HIGHLIGHT_STYLES[command]='fg=#00ff00'
 export ZSH_HIGHLIGHT_STYLES[command]='fg=#00ff00'
 export ZSH_HIGHLIGHT_STYLES[unknown-command]='fg=#ff5555,bold'
 

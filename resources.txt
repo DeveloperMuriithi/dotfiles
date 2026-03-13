@@ -1,7 +1,7 @@
-git:brew install git:sudo pacman -S git
-stow:brew install stow:sudo pacman -S stow
-curl:brew install curl:sudo pacman -S curl
-wget:brew install wget:sudo pacman -S wget
+git:brew install git:pacman -S git
+stow:brew install stow:pacman -S stow
+curl:brew install curl:pacman -S curl
+wget:brew install wget:pacman -S wget
 p10kmeslonerdfont:brew install --cask font-meslo-for-powerlevel10k:yay -S ttf-meslo-nerd-font-powerlevel10k
 skhd:brew install asmvik/formulae/skhd && skhd --start-service:N/A
 alttab:brew install --cask alt-tab:N/A
@@ -9,57 +9,57 @@ bat:brew install bat:pacman -S bat
 autoraise:brew tap dimentium/autoraise && brew install autoraise && brew services start autoraise:N/A
 battery:brew install --cask battery:N/A
 bitwarden:brew install --cask bitwarden:N/A
-btop:brew install btop:sudo pacman -S btop
+btop:brew install btop:pacman -S btop
 caido:brew install --cask caido:bash $DOTFILES/scripts/burp_caido.sh
 burp:brew install --cask burp-suite:yay -S burpsuite
-deskflow:brew install --cask deskflow:sudo pacman -S deskflow
+deskflow:brew install --cask deskflow:pacman -S deskflow
 dirsearch:brew install dirsearch:yay -S dirsearch
-discord:brew install --cask discord:sudo pacman -S discord
-docker:brew install --cask docker-desktop:sudo pacman -S docker
-docker-compose:N/A:sudo pacman -S --needed docker-compose
-dolphin:N/A:sudo pacman -S dolphin
-eza:brew install eza:sudo pacman -S eza
-fd:brew install fd:sudo pacman -S fd
-ffmpeg:brew install ffmpeg:sudo pacman -S ffmpeg
+discord:brew install --cask discord:pacman -S discord
+docker:brew install --cask docker-desktop:pacman -S docker
+docker-compose:N/A:pacman -S --needed
+dolphin:N/A:pacman -S dolphin
+eza:brew install eza:pacman -S eza
+fd:brew install fd:pacman -S fd
+ffmpeg:brew install ffmpeg:pacman -S ffmpeg
 ffuf:brew install ffuf:yay -S ffuf
-fzf:brew install fzf:sudo pacman -S fzf
-gimp:brew install --cask gimp:sudo pacman -S gimp
-gobuster:brew install gobuster:sudo pacman -S gobuster
+fzf:brew install fzf:pacman -S fzf
+gimp:brew install --cask gimp:pacman -S gimp
+gobuster:brew install gobuster:pacman -S gobuster
 googledrive:brew install --cask google-drive:N/A
-hashcat:brew install hashcat:sudo pacman -S hashcat
-jetbrainsnerdmono:brew install --cask font-jetbrains-mono-nerd-font:sudo pacman -S ttf-jetbrains-mono-nerd
-john:brew install john:sudo pacman -S john
+hashcat:brew install hashcat:pacman -S hashcat
+jetbrainsnerdmono:brew install --cask font-jetbrains-mono-nerd-font:pacman -S ttf-jetbrains-mono-nerd
+john:brew install john:pacman -S john
 keka:brew install --cask keka:N/A
 lastfmscrobblerclient:brew install --cask lastfm:N/A
-lazygit:brew install lazygit:sudo pacman -S lazygit
+lazygit:brew install lazygit:pacman -S lazygit
 localsend:brew install --cask localsend:yay -S localsend-bin
 lulu:brew install --cask lulu:N/A
 maccy:brew install --cask maccy:N/A
-metasploit:brew install --cask metasploit:sudo pacman -S metasploit
-neovim:brew install neovim:sudo pacman -S neovim
-nmap:brew install nmap:sudo pacman -S nmap
-node:brew install node:sudo pacman -S nodejs
-npm:N/A:sudo pacman -S npm
-obsidian:brew install --cask obsidian:sudo pacman -S obsidian
-pipx:brew install pipx:sudo pacman -S python-pipx
+metasploit:brew install --cask metasploit:pacman -S metasploit
+neovim:brew install neovim:pacman -S neovim
+nmap:brew install nmap:pacman -S nmap
+node:brew install node:pacman -S nodejs
+npm:N/A:pacman -S npm
+obsidian:brew install --cask obsidian:pacman -S obsidian
+pipx:brew install pipx:pacman -S python-pipx
 powerlevel10k:brew install powerlevel10k:yay -S zsh-theme-powerlevel10k
-python:brew install python@3.14:sudo pacman -S python
+python:brew install python@3.14:pacman -S python
 raycast:brew install --cask raycast:N/A
 rectangle:brew install --cask rectangle:N/A
-ripgrep:brew install ripgrep:sudo pacman -S ripgrep
-spotify:brew install --cask spotify:sudo pacman -S spotify-launcher
-starship:brew install starship:sudo pacman -S starship
+ripgrep:brew install ripgrep:pacman -S ripgrep
+spotify:brew install --cask spotify:pacman -S spotify-launcher
+starship:brew install starship:pacman -S starship
 stats:brew install --cask stats:N/A
 sublime-text:brew install --cask sublime-text:yay -S sublime-text-4
-tcpdump:brew install tcpdump:sudo pacman -S tcpdump
-telegram:brew install --cask telegram:sudo pacman -S telegram-desktop
-tmux:brew install tmux:sudo pacman -S tmux
-vlc:brew install --cask vlc:sudo pacman -S vlc
-vscode:brew install --cask visual-studio-code:sudo pacman -S code
-wezterm:brew install --cask wezterm:sudo pacman -S wezterm
+tcpdump:brew install tcpdump:pacman -S tcpdump
+telegram:brew install --cask telegram:pacman -S telegram-desktop
+tmux:brew install tmux:pacman -S tmux
+vlc:brew install --cask vlc:pacman -S vlc
+vscode:brew install --cask visual-studio-code:pacman -S code
+wezterm:brew install --cask wezterm:pacman -S wezterm
 whatsapp:brew install --cask whatsapp:yay -S whatsapp-for-linux
-wireshark:brew install wireshark && brew install --cask wireshark-app:sudo pacman -S wireshark-cli wireshark-qt
+wireshark:brew install wireshark && brew install --cask wireshark-app:pacman -S wireshark-cli
 yabai:brew install koekeishiya/formulae/yabai && yabai --start-service:N/A
 zen-browser:brew install --cask zen:yay -S zen-browser-bin
-zoxide:brew install zoxide:sudo pacman -S zoxide
-zsh-syntax-highlighting:brew install zsh-syntax-highlighting:sudo pacman -S zsh-syntax-highlighting
+zoxide:brew install zoxide:pacman -S zoxide
+zsh-syntax-highlighting:brew install zsh-syntax-highlighting:pacman -S zsh-syntax-highlighting
