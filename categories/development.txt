@@ -1,5 +1,4 @@
-VS Code
-git
+vscode
 python
 pipx
 node
@@ -9,4 +8,3 @@ docker-compose
 lazygit
 ripgrep
 fd
-tmux

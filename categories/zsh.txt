@@ -1,0 +1,4 @@
+jetbrainsnerdmono
+p10kmeslonerdfont
+zsh-syntax-highlighting
+powerlevel10k

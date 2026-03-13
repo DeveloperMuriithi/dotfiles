@@ -5,3 +5,7 @@ gimp
 obsidian
 sublime-text
 zen-browser
+vlc
+ffmpeg
+bitwarden
+googledrive

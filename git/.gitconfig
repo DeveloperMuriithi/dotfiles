@@ -1,0 +1,18 @@
+[user]
+	name = n1ghtw1ng
+	email = developermuriithi@gmail.com
+
+[core]
+	editor = nvim
+    autocrlf = input
+	sshCommand = ssh -i /Users/n1ghtw1ng/.ssh/id_ed25519
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    cm = commit
+[init]
+	defaultBranch = main
+[pull]
+	rebase = false

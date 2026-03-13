@@ -6,4 +6,4 @@ eza
 fzf
 btop
 neovim
-
+tmux

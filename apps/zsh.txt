@@ -1,5 +1,0 @@
-jet brains nerd mono
-MesloGS NF
-zsh-synstax-highlighting
-starlight
-powerlevel10k
