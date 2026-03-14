@@ -31,4 +31,4 @@ while IFS=: read -r app macOS_cmd Arch_cmd; do
   echo "[RUN] $cmd"
   eval "$cmd"
 
-done <~/dotfiles/resources.txt
+done <~/dotfiles/resources.toml

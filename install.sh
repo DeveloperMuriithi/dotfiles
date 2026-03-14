@@ -1,117 +1,289 @@
 #!/usr/bin/env bash
-DRY_RUN=${1:-false}
+# install.sh — Cross-platform dotfiles bootstrapper
+# Supports: macOS (Homebrew) and Arch Linux (pacman + yay)
+# Usage:
+#   ./install.sh            — normal run
+#   ./install.sh --dry-run  — preview commands without executing
 
-set -e
+set -euo pipefail
 
-DOTFILES="$HOME/dotfiles"
+# ─── Config ──────────────────────────────────────────────────────────────────
+
+DRY_RUN=false
+[[ "${1:-}" == "--dry-run" ]] && DRY_RUN=true
+
+DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname)"
 LOG="$DOTFILES/.installed.log"
+RESOURCES="$DOTFILES/resources.toml"
 
-echo "Starting category-aware installer..."
-echo "Detected OS: $OS"
+# ─── Sanity checks ───────────────────────────────────────────────────────────
 
-# Ensure log exists
-touch "$LOG"
-
-echo "Running bootstrap..."
-if [[ "$OS" == "Darwin" ]]; then
-  bash "$DOTFILES/bootstrap/macos.sh"
-else
-  bash "$DOTFILES/bootstrap/arch.sh"
+if [[ "$OS" != "Darwin" && "$OS" != "Linux" ]]; then
+  echo "❌ Unsupported OS: $OS. Only macOS (Darwin) and Arch Linux are supported."
+  exit 1
 fi
 
-# --- Dispatcher function ---
+if [[ ! -f "$RESOURCES" ]]; then
+  echo "❌ resources.toml not found at: $RESOURCES"
+  exit 1
+fi
+
+mkdir -p "$DOTFILES"
+touch "$LOG"
+
+# ─── Error tracing ───────────────────────────────────────────────────────────
+
+trap 'echo ""; echo "❌ Installer failed at line $LINENO"; echo "   Command: $BASH_COMMAND"; exit 1' ERR
+
+# ─── Logging helpers ─────────────────────────────────────────────────────────
+
+info() { echo "  ℹ $*"; }
+success() { echo "  ✔ $*"; }
+warn() { echo "  ⚠ $*"; }
+skip() { echo "  ↩ $*"; }
+
+# ─── TOML parser ─────────────────────────────────────────────────────────────
+# Minimal parser: reads [app] sections and extracts macos/arch values.
+# Stores results in associative arrays: MACOS_CMDS and ARCH_CMDS.
+
+declare -A MACOS_CMDS
+declare -A ARCH_CMDS
+
+parse_resources() {
+  local current_app=""
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    # Strip inline comments
+    line="${line%%#*}"
+    # Trim leading/trailing whitespace WITHOUT xargs (xargs strips quotes)
+    line="${line#"${line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+    [[ -z "$line" ]] && continue
+
+    # Section header: [app_name]
+    if [[ "$line" =~ ^\[([a-zA-Z0-9_-]+)\]$ ]]; then
+      current_app="${BASH_REMATCH[1]}"
+      continue
+    fi
+
+    [[ -z "$current_app" ]] && continue
+
+    # macos = "..."
+    if [[ "$line" =~ ^macos[[:space:]]*=[[:space:]]*\"(.*)\"$ ]]; then
+      MACOS_CMDS["$current_app"]="${BASH_REMATCH[1]}"
+    fi
+
+    # arch = "..."
+    if [[ "$line" =~ ^arch[[:space:]]*=[[:space:]]*\"(.*)\"$ ]]; then
+      ARCH_CMDS["$current_app"]="${BASH_REMATCH[1]}"
+    fi
+  done <"$RESOURCES"
+}
+
+# ─── Command builder ─────────────────────────────────────────────────────────
+# Normalises a raw command from resources.toml into a safe, runnable string.
+# On Linux: strips any flags already in the command, extracts the package name,
+# then rebuilds with sudo + --needed + --noconfirm.
+# Chained commands (&&) pass through unchanged on both platforms.
+
+build_command() {
+  local raw="$1"
+
+  if [[ "$OS" == "Linux" ]]; then
+    # pacman -S <pkg> → sudo pacman -S --needed --noconfirm <pkg>
+    if [[ "$raw" == pacman* ]]; then
+      local pkg
+      # Strip 'pacman -S', any existing --needed/--noconfirm flags, then trim
+      pkg=$(echo "$raw" |
+        sed 's/^pacman[[:space:]]*-S[[:space:]]*//' |
+        sed 's/--needed//g' |
+        sed 's/--noconfirm//g' |
+        xargs)
+      echo "sudo pacman -S --needed --noconfirm $pkg"
+      return
+    fi
+
+    # yay -S <pkg> → yay -S --needed --noconfirm <pkg>
+    if [[ "$raw" == yay* ]]; then
+      local pkg
+      pkg=$(echo "$raw" |
+        sed 's/^yay[[:space:]]*-S[[:space:]]*//' |
+        sed 's/--needed//g' |
+        sed 's/--noconfirm//g' |
+        xargs)
+      echo "yay -S --needed --noconfirm $pkg"
+      return
+    fi
+  fi
+
+  # macOS brew commands (and any bash script calls) pass through as-is
+  echo "$raw"
+}
+
+# ─── Install dispatcher ──────────────────────────────────────────────────────
+
 install_app() {
   local app="$1"
-  local method="$2"
+  local raw_cmd="$2"
 
-  [[ "$method" == "N/A" || -z "$method" ]] && return
-
-  # Skip if already installed
-  if grep -Fxq "$app" "$LOG"; then
-    echo "[SKIP] $app already installed"
+  # Skip N/A entries
+  if [[ "$raw_cmd" == "N/A" || -z "$raw_cmd" ]]; then
     return
   fi
 
-  # Wrap Linux installs with sudo + flags
-  if [[ "$OS" == "Linux" ]]; then
-    if [[ "$method" =~ ^pacman ]]; then
-      method="sudo $method --needed --noconfirm"
-    elif [[ "$method" =~ ^yay ]]; then
-      method="sudo $method --needed --noconfirm"
-    fi
+  # Skip already-installed apps (log check is fast; --needed is the safety net)
+  if grep -Fxq "$app" "$LOG"; then
+    skip "$app (already installed)"
+    return
   fi
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    echo "[DRY RUN] $method"
-  else
-    echo "[RUN] $method"
-    eval "$method"
+  local cmd
+  cmd=$(build_command "$raw_cmd")
+
+  if [[ "$DRY_RUN" == true ]]; then
+    echo "  [DRY RUN] $cmd"
+    return
+  fi
+
+  info "Installing $app..."
+  echo "  → $cmd"
+
+  # Execute in a subshell to prevent environment pollution.
+  # && ensures we only log the app on success.
+  if (bash -c "$cmd"); then
     echo "$app" >>"$LOG"
+    success "$app installed"
+  else
+    warn "$app install failed — skipping (exit code: $?)"
   fi
 }
 
-# --- Read resources ---
-declare -A resources
-while IFS=: read -r app macOS_method arch_method; do
-  [[ -z "$app" ]] && continue
-  app=$(echo "$app" | xargs)
+# ─── Category runner ─────────────────────────────────────────────────────────
 
-  if [[ "$OS" == "Darwin" ]]; then
-    resources["$app"]="$macOS_method"
-  else
-    resources["$app"]="$arch_method"
-  fi
-done <"$DOTFILES/resources.txt"
-
-# --- Install a category ---
 install_category() {
   local category_file="$1"
-  while read -r app; do
-    [[ "$app" =~ ^#.*$ || -z "$app" ]] && continue
-    method="${resources[$app]}"
-    if [[ -z "$method" ]]; then
-      echo "⚠ No install method defined for '$app'"
+  local category_name
+  category_name=$(basename "$category_file" .txt)
+
+  if [[ ! -f "$category_file" ]]; then
+    warn "Category file not found: $category_file"
+    return
+  fi
+
+  echo ""
+  echo "▶ Category: $category_name"
+
+  while IFS= read -r app || [[ -n "$app" ]]; do
+    # Skip comments and blank lines
+    [[ "$app" =~ ^[[:space:]]*# || -z "${app// /}" ]] && continue
+    app="$(echo "$app" | xargs)"
+
+    local cmd=""
+    if [[ "$OS" == "Darwin" ]]; then
+      cmd="${MACOS_CMDS[$app]:-}"
+    else
+      cmd="${ARCH_CMDS[$app]:-}"
+    fi
+
+    if [[ -z "$cmd" ]]; then
+      warn "No install entry found for '$app' in resources.toml"
       continue
     fi
-    install_app "$app" "$method"
+
+    install_app "$app" "$cmd"
   done <"$category_file"
 }
 
-# --- Auto-install essential categories ---
-echo "Installing system essentials..."
-install_category "$DOTFILES/categories/system.txt"
+# ─── Bootstrap ───────────────────────────────────────────────────────────────
 
-echo "Installing core apps..."
+run_bootstrap() {
+  echo ""
+  echo "▶ Bootstrap"
+  if [[ "$OS" == "Darwin" ]]; then
+    bash "$DOTFILES/bootstrap/macos.sh"
+  else
+    bash "$DOTFILES/bootstrap/arch.sh"
+  fi
+}
+
+# ─── Main ────────────────────────────────────────────────────────────────────
+
+echo ""
+echo "╔══════════════════════════════════════╗"
+echo "║       Dotfiles Installer             ║"
+echo "╚══════════════════════════════════════╝"
+echo ""
+echo "  OS:       $OS"
+echo "  Dotfiles: $DOTFILES"
+echo "  Log:      $LOG"
+[[ "$DRY_RUN" == true ]] && echo "  Mode:     DRY RUN (no changes will be made)"
+echo ""
+
+# 1. Parse resources.toml
+parse_resources
+info "Loaded ${#MACOS_CMDS[@]} macOS entries, ${#ARCH_CMDS[@]} Arch entries from resources.toml"
+
+# 2. Bootstrap package manager
+run_bootstrap
+
+# 3. Auto-install essential categories
+echo ""
+echo "━━━ Essential packages ━━━━━━━━━━━━━━━━━━"
+install_category "$DOTFILES/categories/system.txt"
 install_category "$DOTFILES/categories/core.txt"
 
+# 4. Platform-specific category
+echo ""
+echo "━━━ Platform packages ━━━━━━━━━━━━━━━━━━━"
 if [[ "$OS" == "Darwin" ]]; then
-  echo "Installing macOS-specific apps..."
   install_category "$DOTFILES/categories/macOS.txt"
 else
-  echo "Installing Arch-specific apps..."
   install_category "$DOTFILES/categories/arch.txt"
 fi
 
-# --- Optional categories prompt ---
+# 5. Optional categories — prompt user
+echo ""
+echo "━━━ Optional categories ━━━━━━━━━━━━━━━━━"
+
+SKIP_CATEGORIES=("core" "macOS" "arch" "system")
+
 for category_file in "$DOTFILES"/categories/*.txt; do
   category_name=$(basename "$category_file" .txt)
-  [[ "$category_name" == "core" || "$category_name" == "macOS" || "$category_name" == "arch" || "$category_name" == "system" ]] && continue
 
-  read -rp "Do you want to install category '$category_name'? [y/N]: " response
+  # Skip auto-installed categories
+  skip=false
+  for s in "${SKIP_CATEGORIES[@]}"; do
+    [[ "$category_name" == "$s" ]] && skip=true && break
+  done
+  $skip && continue
+
+  read -rp "  Install '$category_name'? [y/N]: " response
   if [[ "$response" =~ ^[Yy]$ ]]; then
     install_category "$category_file"
+  else
+    info "Skipped '$category_name'"
   fi
 done
 
-# --- Dynamic stow for config directories ---
+# 6. Apply dotfiles via stow
+echo ""
+echo "━━━ Applying dotfiles (stow) ━━━━━━━━━━━━"
 for dir in "$DOTFILES"/*/; do
   dir_name=$(basename "$dir")
-  [[ -d "$dir" && -f "$dir/.stow-target" ]] && stow -v -t "$HOME" "$dir_name"
+  if [[ -d "$dir" && -f "$dir/.stow-target" ]]; then
+    info "Stowing $dir_name..."
+    stow -v -t "$HOME" "$dir_name" || warn "stow failed for $dir_name"
+  fi
 done
 
-# --- Git setup ---
-echo "Setting up Git..."
-bash git/gitsetup.sh
+# 7. Git setup
+echo ""
+echo "━━━ Git setup ━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+bash "$DOTFILES/git/gitsetup.sh"
 
-echo "Dotfiles setup complete!"
+# 8. Done
+echo ""
+echo "╔══════════════════════════════════════╗"
+echo "║  ✔  Setup complete!                  ║"
+echo "╚══════════════════════════════════════╝"
+echo ""

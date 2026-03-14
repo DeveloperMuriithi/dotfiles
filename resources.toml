@@ -1,0 +1,273 @@
+# resources.toml
+# Format:
+#   [app_name]
+#   macos = "brew install ..."
+#   arch  = "pacman -S ..." | "yay -S ..." | "N/A"
+#
+# Rules:
+#   - Do NOT add sudo, --needed, or --noconfirm here. install.sh adds them.
+#   - Use "N/A" when a package is not available on that platform.
+#   - Chained commands (&&) are allowed for macOS post-install hooks.
+#   - For AUR packages use yay -S, for official repos use pacman -S.
+
+[git]
+macos = "brew install git"
+arch  = "pacman -S git"
+
+[stow]
+macos = "brew install stow"
+arch  = "pacman -S stow"
+
+[curl]
+macos = "brew install curl"
+arch  = "pacman -S curl"
+
+[wget]
+macos = "brew install wget"
+arch  = "pacman -S wget"
+
+[bat]
+macos = "brew install bat"
+arch  = "pacman -S bat"
+
+[btop]
+macos = "brew install btop"
+arch  = "pacman -S btop"
+
+[eza]
+macos = "brew install eza"
+arch  = "pacman -S eza"
+
+[fd]
+macos = "brew install fd"
+arch  = "pacman -S fd"
+
+[ffmpeg]
+macos = "brew install ffmpeg"
+arch  = "pacman -S ffmpeg"
+
+[fzf]
+macos = "brew install fzf"
+arch  = "pacman -S fzf"
+
+[lazygit]
+macos = "brew install lazygit"
+arch  = "pacman -S lazygit"
+
+[neovim]
+macos = "brew install neovim"
+arch  = "pacman -S neovim"
+
+[ripgrep]
+macos = "brew install ripgrep"
+arch  = "pacman -S ripgrep"
+
+[starship]
+macos = "brew install starship"
+arch  = "pacman -S starship"
+
+[tmux]
+macos = "brew install tmux"
+arch  = "pacman -S tmux"
+
+[zoxide]
+macos = "brew install zoxide"
+arch  = "pacman -S zoxide"
+
+[zsh-syntax-highlighting]
+macos = "brew install zsh-syntax-highlighting"
+arch  = "pacman -S zsh-syntax-highlighting"
+
+[node]
+macos = "brew install node"
+arch  = "pacman -S nodejs"
+
+[npm]
+macos = "N/A"
+arch  = "pacman -S npm"
+
+[python]
+macos = "brew install python@3.14"
+arch  = "pacman -S python"
+
+[pipx]
+macos = "brew install pipx"
+arch  = "pacman -S python-pipx"
+
+[docker]
+macos = "brew install --cask docker-desktop"
+arch  = "pacman -S docker"
+
+[docker-compose]
+macos = "N/A"
+arch  = "pacman -S docker-compose"
+
+[deskflow]
+macos = "brew install --cask deskflow"
+arch  = "pacman -S deskflow"
+
+[discord]
+macos = "brew install --cask discord"
+arch  = "pacman -S discord"
+
+[dolphin]
+macos = "N/A"
+arch  = "pacman -S dolphin"
+
+[gimp]
+macos = "brew install --cask gimp"
+arch  = "pacman -S gimp"
+
+[localsend]
+macos = "brew install --cask localsend"
+arch  = "yay -S localsend-bin"
+
+[metasploit]
+macos = "brew install --cask metasploit"
+arch  = "pacman -S metasploit"
+
+[nmap]
+macos = "brew install nmap"
+arch  = "pacman -S nmap"
+
+[obsidian]
+macos = "brew install --cask obsidian"
+arch  = "pacman -S obsidian"
+
+[spotify]
+macos = "brew install --cask spotify"
+arch  = "pacman -S spotify-launcher"
+
+[tcpdump]
+macos = "brew install tcpdump"
+arch  = "pacman -S tcpdump"
+
+[telegram]
+macos = "brew install --cask telegram"
+arch  = "pacman -S telegram-desktop"
+
+[vlc]
+macos = "brew install --cask vlc"
+arch  = "pacman -S vlc"
+
+[vscode]
+macos = "brew install --cask visual-studio-code"
+arch  = "pacman -S code"
+
+[wezterm]
+macos = "brew install --cask wezterm"
+arch  = "pacman -S wezterm"
+
+[gobuster]
+macos = "brew install gobuster"
+arch  = "pacman -S gobuster"
+
+[hashcat]
+macos = "brew install hashcat"
+arch  = "pacman -S hashcat"
+
+[john]
+macos = "brew install john"
+arch  = "pacman -S john"
+
+[ffuf]
+macos = "brew install ffuf"
+arch  = "yay -S ffuf"
+
+[dirsearch]
+macos = "brew install dirsearch"
+arch  = "yay -S dirsearch"
+
+[wireshark]
+macos = "brew install wireshark && brew install --cask wireshark-app"
+arch  = "pacman -S wireshark-cli"
+
+[burp]
+macos = "brew install --cask burp-suite"
+arch  = "yay -S burpsuite"
+
+[caido]
+macos = "brew install --cask caido"
+arch  = "bash $DOTFILES/scripts/install_caido.sh"
+
+[p10kmeslonerdfont]
+macos = "brew install --cask font-meslo-for-powerlevel10k"
+arch  = "yay -S ttf-meslo-nerd-font-powerlevel10k"
+
+[jetbrainsnerdmono]
+macos = "brew install --cask font-jetbrains-mono-nerd-font"
+arch  = "pacman -S ttf-jetbrains-mono-nerd"
+
+[powerlevel10k]
+macos = "brew install powerlevel10k"
+arch  = "yay -S zsh-theme-powerlevel10k"
+
+[sublime-text]
+macos = "brew install --cask sublime-text"
+arch  = "yay -S sublime-text-4"
+
+[zen-browser]
+macos = "brew install --cask zen"
+arch  = "yay -S zen-browser-bin"
+
+[whatsapp]
+macos = "brew install --cask whatsapp"
+arch  = "yay -S whatsapp-for-linux"
+
+# --- macOS only ---
+
+[skhd]
+macos = "brew install asmvik/formulae/skhd && skhd --start-service"
+arch  = "N/A"
+
+[alttab]
+macos = "brew install --cask alt-tab"
+arch  = "N/A"
+
+[autoraise]
+macos = "brew tap dimentium/autoraise && brew install autoraise && brew services start autoraise"
+arch  = "N/A"
+
+[battery]
+macos = "brew install --cask battery"
+arch  = "N/A"
+
+[bitwarden]
+macos = "brew install --cask bitwarden"
+arch  = "N/A"
+
+[googledrive]
+macos = "brew install --cask google-drive"
+arch  = "N/A"
+
+[keka]
+macos = "brew install --cask keka"
+arch  = "N/A"
+
+[lastfmscrobblerclient]
+macos = "brew install --cask lastfm"
+arch  = "N/A"
+
+[lulu]
+macos = "brew install --cask lulu"
+arch  = "N/A"
+
+[maccy]
+macos = "brew install --cask maccy"
+arch  = "N/A"
+
+[raycast]
+macos = "brew install --cask raycast"
+arch  = "N/A"
+
+[rectangle]
+macos = "brew install --cask rectangle"
+arch  = "N/A"
+
+[stats]
+macos = "brew install --cask stats"
+arch  = "N/A"
+
+[yabai]
+macos = "brew install koekeishiya/formulae/yabai && yabai --start-service"
+arch  = "N/A"
