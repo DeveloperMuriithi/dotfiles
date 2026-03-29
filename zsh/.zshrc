@@ -82,3 +82,7 @@ for p10k in \
 do
   [[ -f $p10k ]] && source $p10k && break
 done
+
+# piknik
+
+source /usr/local/etc/profile.d/piknik.sh
