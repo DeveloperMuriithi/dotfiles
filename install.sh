@@ -14,6 +14,15 @@ DRY_RUN=false
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname)"
+DISTRO=""
+
+if [[ "$OS" == "Linux" ]]; then
+  if [[ -f /etc/os-release ]]; then
+    . /etc/os-release
+    DISTRO="$ID"
+  fi
+fi
+
 LOG="$DOTFILES/.installed.log"
 RESOURCES="$DOTFILES/resources.toml"
 
@@ -49,6 +58,7 @@ skip() { echo "  ↩ $*"; }
 
 declare -A MACOS_CMDS
 declare -A ARCH_CMDS
+declare -A UBUNTU_CMDS
 
 parse_resources() {
   local current_app=""
@@ -77,6 +87,12 @@ parse_resources() {
     if [[ "$line" =~ ^arch[[:space:]]*=[[:space:]]*\"(.*)\"$ ]]; then
       ARCH_CMDS["$current_app"]="${BASH_REMATCH[1]}"
     fi
+
+    # ubuntu = "..."
+    if [[ "$line" =~ ^ubuntu[[:space:]]*=[[:space:]]*\"(.*)\"$ ]]; then
+      UBUNTU_CMDS["$current_app"]="${BASH_REMATCH[1]}"
+    fi
+
   done <"$RESOURCES"
 }
 
@@ -90,35 +106,50 @@ build_command() {
   local raw="$1"
 
   if [[ "$OS" == "Linux" ]]; then
-    # pacman -S <pkg> → sudo pacman -S --needed --noconfirm <pkg>
-    if [[ "$raw" == pacman* ]]; then
-      local pkg
-      # Strip 'pacman -S', any existing --needed/--noconfirm flags, then trim
-      pkg=$(echo "$raw" |
-        sed 's/^pacman[[:space:]]*-S[[:space:]]*//' |
-        sed 's/--needed//g' |
-        sed 's/--noconfirm//g' |
-        xargs)
-      echo "sudo pacman -S --needed --noconfirm $pkg"
-      return
+
+    # ─── Arch ─────────────────────────────
+    if [[ "$DISTRO" == "arch" ]]; then
+      if [[ "$raw" == pacman* ]]; then
+        local pkg
+        pkg=$(echo "$raw" |
+          sed 's/^pacman[[:space:]]*-S[[:space:]]*//' |
+          sed 's/--needed//g' |
+          sed 's/--noconfirm//g' |
+          xargs)
+        echo "sudo pacman -S --needed --noconfirm $pkg"
+        return
+      fi
+
+      if [[ "$raw" == yay* ]]; then
+        local pkg
+        pkg=$(echo "$raw" |
+          sed 's/^yay[[:space:]]*-S[[:space:]]*//' |
+          sed 's/--needed//g' |
+          sed 's/--noconfirm//g' |
+          xargs)
+        echo "yay -S --needed --noconfirm $pkg"
+        return
+      fi
     fi
 
-    # yay -S <pkg> → yay -S --needed --noconfirm <pkg>
-    if [[ "$raw" == yay* ]]; then
-      local pkg
-      pkg=$(echo "$raw" |
-        sed 's/^yay[[:space:]]*-S[[:space:]]*//' |
-        sed 's/--needed//g' |
-        sed 's/--noconfirm//g' |
-        xargs)
-      echo "yay -S --needed --noconfirm $pkg"
-      return
+    # ─── Ubuntu / Debian ──────────────────
+    if [[ "$DISTRO" == "ubuntu" || "$DISTRO" == "debian" ]]; then
+      if [[ "$raw" == apt* ]]; then
+        local pkg
+        pkg=$(echo "$raw" |
+          sed 's/^apt[[:space:]]*install[[:space:]]*//' |
+          sed 's/-y//g' |
+          xargs)
+
+        echo "sudo apt update && sudo apt install -y $pkg"
+        return
+      fi
     fi
   fi
 
-  # macOS brew commands (and any bash script calls) pass through as-is
   echo "$raw"
 }
+
 
 # ─── Install dispatcher ──────────────────────────────────────────────────────
 
@@ -180,10 +211,23 @@ install_category() {
 
     local cmd=""
     if [[ "$OS" == "Darwin" ]]; then
-      cmd="${MACOS_CMDS[$app]:-}"
-    else
-      cmd="${ARCH_CMDS[$app]:-}"
-    fi
+  cmd="${MACOS_CMDS[$app]:-}"
+
+  elif [[ "$OS" == "Linux" ]]; then
+    case "$DISTRO" in
+      arch)
+        cmd="${ARCH_CMDS[$app]:-}"
+        ;;
+      ubuntu|debian)
+        cmd="${UBUNTU_CMDS[$app]:-}"
+        ;;
+      *)
+        warn "Unsupported Linux distro: $DISTRO"
+        return
+        ;;
+    esac
+  fi
+
 
     if [[ -z "$cmd" ]]; then
       warn "No install entry found for '$app' in resources.toml"
@@ -199,12 +243,25 @@ install_category() {
 run_bootstrap() {
   echo ""
   echo "▶ Bootstrap"
+
   if [[ "$OS" == "Darwin" ]]; then
     bash "$DOTFILES/bootstrap/macos.sh"
-  else
-    bash "$DOTFILES/bootstrap/arch.sh"
+
+  elif [[ "$OS" == "Linux" ]]; then
+    case "$DISTRO" in
+      arch)
+        bash "$DOTFILES/bootstrap/arch.sh"
+        ;;
+      ubuntu|debian)
+        bash "$DOTFILES/bootstrap/ubuntu.sh"
+        ;;
+      *)
+        warn "No bootstrap for distro: $DISTRO"
+        ;;
+    esac
   fi
 }
+
 
 # ─── Main ────────────────────────────────────────────────────────────────────
 
@@ -214,6 +271,7 @@ echo "║       Dotfiles Installer             ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
 echo "  OS:       $OS"
+echo "  Distro:   ${DISTRO:-N/A}"
 echo "  Dotfiles: $DOTFILES"
 echo "  Log:      $LOG"
 [[ "$DRY_RUN" == true ]] && echo "  Mode:     DRY RUN (no changes will be made)"
@@ -221,7 +279,7 @@ echo ""
 
 # 1. Parse resources.toml
 parse_resources
-info "Loaded ${#MACOS_CMDS[@]} macOS entries, ${#ARCH_CMDS[@]} Arch entries from resources.toml"
+info "Loaded ${#MACOS_CMDS[@]} macOS, ${#ARCH_CMDS[@]} Arch, ${#UBUNTU_CMDS[@]} Ubuntu entries"
 
 # 2. Bootstrap package manager
 run_bootstrap
@@ -237,9 +295,18 @@ echo ""
 echo "━━━ Platform packages ━━━━━━━━━━━━━━━━━━━"
 if [[ "$OS" == "Darwin" ]]; then
   install_category "$DOTFILES/categories/macOS.txt"
-else
-  install_category "$DOTFILES/categories/arch.txt"
+
+elif [[ "$OS" == "Linux" ]]; then
+  case "$DISTRO" in
+    arch)
+      install_category "$DOTFILES/categories/arch.txt"
+      ;;
+    ubuntu|debian)
+      # optional: create ubuntu.txt later
+      ;;
+  esac
 fi
+
 
 # 5. Optional categories — prompt user
 echo ""

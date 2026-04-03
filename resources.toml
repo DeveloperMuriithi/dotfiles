@@ -13,261 +13,326 @@
 [git]
 macos = "brew install git"
 arch  = "pacman -S git"
+ubuntu = "apt install git"
 
 [stow]
 macos = "brew install stow"
 arch  = "pacman -S stow"
+ubuntu = "apt install stow"
 
 [curl]
 macos = "brew install curl"
 arch  = "pacman -S curl"
+ubuntu = "apt install curl"
 
 [wget]
 macos = "brew install wget"
 arch  = "pacman -S wget"
+ubuntu = "apt install wget"
 
 [bat]
 macos = "brew install bat"
 arch  = "pacman -S bat"
+ubuntu = "apt install bat"
 
 [btop]
 macos = "brew install btop"
 arch  = "pacman -S btop"
+ubuntu = "apt install btop"
 
 [eza]
 macos = "brew install eza"
 arch  = "pacman -S eza"
+ubuntu = "N/A"
 
 [fd]
 macos = "brew install fd"
 arch  = "pacman -S fd"
+ubuntu = "apt install fd-find"
 
 [ffmpeg]
 macos = "brew install ffmpeg"
 arch  = "pacman -S ffmpeg"
+ubuntu = "apt install ffmpeg"
 
 [fzf]
 macos = "brew install fzf"
 arch  = "pacman -S fzf"
+ubuntu = "apt install fzf"
 
 [lazygit]
 macos = "brew install lazygit"
 arch  = "pacman -S lazygit"
+ubuntu = "N/A"
 
 [neovim]
 macos = "brew install neovim"
 arch  = "pacman -S neovim"
+ubuntu = "apt install neovim"
 
 [ripgrep]
 macos = "brew install ripgrep"
 arch  = "pacman -S ripgrep"
+ubuntu = "apt install neovim"
 
 [starship]
 macos = "brew install starship"
 arch  = "pacman -S starship"
+ubuntu = "apt install starship"
 
 [tmux]
 macos = "brew install tmux"
 arch  = "pacman -S tmux"
+ubuntu = "apt install tmux"
 
 [zoxide]
 macos = "brew install zoxide"
 arch  = "pacman -S zoxide"
+ubuntu = "N/A"
 
 [zsh-syntax-highlighting]
 macos = "brew install zsh-syntax-highlighting"
 arch  = "pacman -S zsh-syntax-highlighting"
+ubuntu = "apt install zsh-syntax-highlighting"
 
 [node]
 macos = "brew install node"
 arch  = "pacman -S nodejs"
+ubuntu = "apt install nodejs"
 
 [npm]
 macos = "N/A"
 arch  = "pacman -S npm"
+ubuntu = "apt install npm"
 
 [python]
 macos = "brew install python@3.14"
 arch  = "pacman -S python"
+ubuntu = "apt install python3"
 
 [pipx]
 macos = "brew install pipx"
 arch  = "pacman -S python-pipx"
+ubuntu = "apt install pipx"
 
 [docker]
 macos = "brew install --cask docker-desktop"
 arch  = "pacman -S docker"
+ubuntu = "apt install docker.io"
 
 [docker-compose]
 macos = "N/A"
 arch  = "pacman -S docker-compose"
+ubuntu = "apt install docker-compose"
 
 [deskflow]
 macos = "brew install --cask deskflow"
 arch  = "pacman -S deskflow"
+ubuntu = "N/A"
 
 [discord]
 macos = "brew install --cask discord"
 arch  = "pacman -S discord"
+ubuntu = "N/A"
 
 [dolphin]
 macos = "N/A"
 arch  = "pacman -S dolphin"
+ubuntu = "N/A"
 
 [gimp]
 macos = "brew install --cask gimp"
 arch  = "pacman -S gimp"
+ubuntu = "N/A"
 
 [localsend]
 macos = "brew install --cask localsend"
 arch  = "yay -S localsend-bin"
+ubuntu = "N/A"
 
 [metasploit]
 macos = "brew install --cask metasploit"
 arch  = "pacman -S metasploit"
+ubuntu = "N/A"
 
 [nmap]
 macos = "brew install nmap"
 arch  = "pacman -S nmap"
+ubuntu = "apt install nmap"
 
 [obsidian]
 macos = "brew install --cask obsidian"
 arch  = "pacman -S obsidian"
+ubuntu = "N/A"
 
 [spotify]
 macos = "brew install --cask spotify"
 arch  = "pacman -S spotify-launcher"
+ubuntu = "N/A"
 
 [tcpdump]
 macos = "brew install tcpdump"
 arch  = "pacman -S tcpdump"
+ubuntu = "apt install tcpdump"
 
 [telegram]
 macos = "brew install --cask telegram"
 arch  = "pacman -S telegram-desktop"
+ubuntu = "N/A"
 
 [vlc]
 macos = "brew install --cask vlc"
 arch  = "pacman -S vlc"
+ubuntu = "N/A"
 
 [vscode]
 macos = "brew install --cask visual-studio-code"
 arch  = "pacman -S code"
+ubuntu = "N/A"
 
 [wezterm]
 macos = "brew install --cask wezterm"
 arch  = "pacman -S wezterm"
+ubuntu = "N/A"
 
 [gobuster]
 macos = "brew install gobuster"
 arch  = "pacman -S gobuster"
+ubuntu = "N/A"
 
 [hashcat]
 macos = "brew install hashcat"
 arch  = "pacman -S hashcat"
+ubuntu = "N/A"
 
 [john]
 macos = "brew install john"
 arch  = "pacman -S john"
+ubuntu = "N/A"
 
 [ffuf]
 macos = "brew install ffuf"
 arch  = "yay -S ffuf"
+ubuntu = "N/A"
 
 [dirsearch]
 macos = "brew install dirsearch"
 arch  = "yay -S dirsearch"
+ubuntu = "N/A"
 
 [wireshark]
 macos = "brew install wireshark && brew install --cask wireshark-app"
 arch  = "pacman -S wireshark-cli"
+ubuntu = "N/A"
 
 [burp]
 macos = "brew install --cask burp-suite"
 arch  = "yay -S burpsuite"
+ubuntu = "N/A"
 
 [caido]
 macos = "brew install --cask caido"
 arch  = "bash $DOTFILES/scripts/install_caido.sh"
+ubuntu = "N/A"
 
 [p10kmeslonerdfont]
 macos = "brew install --cask font-meslo-for-powerlevel10k"
 arch  = "yay -S ttf-meslo-nerd-font-powerlevel10k"
+ubuntu = "N/A"
 
 [jetbrainsnerdmono]
 macos = "brew install --cask font-jetbrains-mono-nerd-font"
 arch  = "pacman -S ttf-jetbrains-mono-nerd"
+ubuntu = "N/A"
 
 [powerlevel10k]
 macos = "brew install powerlevel10k"
 arch  = "yay -S zsh-theme-powerlevel10k"
+ubuntu = "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k"
 
 [sublime-text]
 macos = "brew install --cask sublime-text"
 arch  = "yay -S sublime-text-4"
+ubuntu = "N/A"
 
 [zen-browser]
 macos = "brew install --cask zen"
 arch  = "yay -S zen-browser-bin"
+ubuntu = "N/A"
 
 [whatsapp]
 macos = "brew install --cask whatsapp"
 arch  = "yay -S whatsapp-for-linux"
+ubuntu = "N/A"
 
 # --- macOS only ---
 
 [skhd]
 macos = "brew install asmvik/formulae/skhd && skhd --start-service"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [alttab]
 macos = "brew install --cask alt-tab"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [autoraise]
 macos = "brew tap dimentium/autoraise && brew install autoraise && brew services start autoraise"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [battery]
 macos = "brew install --cask battery"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [bitwarden]
 macos = "brew install --cask bitwarden"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [googledrive]
 macos = "brew install --cask google-drive"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [keka]
 macos = "brew install --cask keka"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [lastfmscrobblerclient]
 macos = "brew install --cask lastfm"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [lulu]
 macos = "brew install --cask lulu"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [maccy]
 macos = "brew install --cask maccy"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [raycast]
 macos = "brew install --cask raycast"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [rectangle]
 macos = "brew install --cask rectangle"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [stats]
 macos = "brew install --cask stats"
 arch  = "N/A"
+ubuntu = "N/A"
 
 [yabai]
 macos = "brew install koekeishiya/formulae/yabai && yabai --start-service"
 arch  = "N/A"
+ubuntu = "N/A"
