@@ -1,2 +1,8 @@
-caido
-burp
+# Security and testing
+nmap
+ffuf
+dirsearch
+gobuster
+hashcat
+john
+wireshark

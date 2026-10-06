@@ -1,1 +1,14 @@
-lastfmscrobblerclient
+# Extras
+spotify
+deskflow
+localsend
+gimp
+obsidian
+sublime-text
+zen-browser
+vlc
+maccy
+lulu
+alttab
+rectangle
+stats

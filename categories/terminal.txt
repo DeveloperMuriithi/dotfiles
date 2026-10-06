@@ -1,9 +1,6 @@
+# Terminal applications
+kitty
 wezterm
-starship
-zoxide
-bat
-eza
-fzf
-btop
-neovim
-tmux
+yabai
+skhd
+lazygit

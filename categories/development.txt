@@ -1,10 +1,9 @@
-vscode
-python
-pipx
+# Development tools
+neovim
 node
 npm
-docker
-docker-compose
-lazygit
-ripgrep
-fd
+python
+pipx
+go
+rust
+haskell

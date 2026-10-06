@@ -1,8 +1,9 @@
+# macOS applications
 raycast
 maccy
 autoraise
 lulu
-keka
+keeka
 alttab
 yabai
 skhd

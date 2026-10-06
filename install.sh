@@ -151,6 +151,34 @@ build_command() {
 }
 
 
+# ─── Real installation checker ───────────────────────────────────────────────
+# Checks the actual system state (brew/pacman/apt) rather than relying on
+# a log file that can go stale or get carried over via git.
+
+is_installed() {
+  local app="$1"
+
+  if [[ "$OS" == "Darwin" ]]; then
+    brew list --formula "$app" &>/dev/null && return 0
+    brew list --cask "$app" &>/dev/null && return 0
+    return 1
+
+  elif [[ "$OS" == "Linux" ]]; then
+    case "$DISTRO" in
+      arch)
+        pacman -Qi "$app" &>/dev/null && return 0
+        return 1
+        ;;
+      ubuntu|debian)
+        dpkg -s "$app" &>/dev/null 2>&1 && return 0
+        return 1
+        ;;
+    esac
+  fi
+
+  return 1
+}
+
 # ─── Install dispatcher ──────────────────────────────────────────────────────
 
 install_app() {
@@ -162,10 +190,19 @@ install_app() {
     return
   fi
 
-  # Skip already-installed apps (log check is fast; --needed is the safety net)
-  if grep -Fxq "$app" "$LOG"; then
+  # Check REAL state first — don't trust the log alone
+  if is_installed "$app"; then
     skip "$app (already installed)"
+    # keep the log in sync so future runs can fast-path this check
+    grep -Fxq "$app" "$LOG" || echo "$app" >>"$LOG"
     return
+  fi
+
+  # If the log says installed but is_installed disagrees, the log was wrong —
+  # drop the stale entry so it doesn't lie to us again.
+  if grep -Fxq "$app" "$LOG"; then
+    warn "$app was marked installed in log but isn't found on system — removing stale entry"
+    sed -i '' "/^${app}\$/d" "$LOG" 2>/dev/null || sed -i "/^${app}\$/d" "$LOG"
   fi
 
   local cmd
@@ -188,6 +225,8 @@ install_app() {
     warn "$app install failed — skipping (exit code: $?)"
   fi
 }
+
+
 
 # ─── Category runner ─────────────────────────────────────────────────────────
 

@@ -1,11 +1,5 @@
-spotify
-deskflow
-localsend
-gimp
-obsidian
-sublime-text
-zen-browser
-vlc
-ffmpeg
-bitwarden
-googledrive
+# System essentials
+git
+stow
+curl
+wget

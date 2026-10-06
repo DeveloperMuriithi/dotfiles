@@ -73,7 +73,7 @@ ubuntu = "apt install neovim"
 [ripgrep]
 macos = "brew install ripgrep"
 arch  = "pacman -S ripgrep"
-ubuntu = "apt install neovim"
+ubuntu = "apt install ripgrep"
 
 [starship]
 macos = "brew install starship"
@@ -106,7 +106,7 @@ arch  = "pacman -S npm"
 ubuntu = "apt install npm"
 
 [python]
-macos = "brew install python@3.14"
+macos = "brew install python@3.12"
 arch  = "pacman -S python"
 ubuntu = "apt install python3"
 
