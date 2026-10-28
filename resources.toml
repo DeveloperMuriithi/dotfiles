@@ -1,14 +1,16 @@
 # resources.toml
 # Format:
 #   [app_name]
-#   macos = "brew install ..."
-#   arch  = "pacman -S ..." | "yay -S ..." | "N/A"
+#   macos  = "brew install ..."
+#   arch   = "pacman -S ..." | "yay -S ..." | "N/A"
+#   ubuntu = "apt install ..." | "N/A"
 #
 # Rules:
 #   - Do NOT add sudo, --needed, or --noconfirm here. install.sh adds them.
 #   - Use "N/A" when a package is not available on that platform.
 #   - Chained commands (&&) are allowed for macOS post-install hooks.
 #   - For AUR packages use yay -S, for official repos use pacman -S.
+#   - The "ubuntu" key is also used for Debian and Kali Linux (all APT-based).
 
 [git]
 macos = "brew install git"
@@ -29,6 +31,21 @@ ubuntu = "apt install curl"
 macos = "brew install wget"
 arch  = "pacman -S wget"
 ubuntu = "apt install wget"
+
+[bash]
+macos = "brew install bash"
+arch  = "pacman -S bash"
+ubuntu = "apt install bash"
+
+[zsh]
+macos = "brew install zsh"
+arch  = "pacman -S zsh"
+ubuntu = "apt install zsh"
+
+[fish]
+macos = "brew install fish"
+arch  = "pacman -S fish"
+ubuntu = "apt install fish"
 
 [bat]
 macos = "brew install bat"
@@ -115,6 +132,21 @@ macos = "brew install pipx"
 arch  = "pacman -S python-pipx"
 ubuntu = "apt install pipx"
 
+[go]
+macos = "brew install go"
+arch  = "pacman -S go"
+ubuntu = "apt install golang-go"
+
+[rust]
+macos = "brew install rust"
+arch  = "pacman -S rust"
+ubuntu = "apt install rustc cargo"
+
+[haskell]
+macos = "brew install ghc cabal-install"
+arch  = "pacman -S ghc cabal-install"
+ubuntu = "apt install ghc cabal-install"
+
 [docker]
 macos = "brew install --cask docker-desktop"
 arch  = "pacman -S docker"
@@ -194,6 +226,11 @@ ubuntu = "N/A"
 macos = "brew install --cask wezterm"
 arch  = "pacman -S wezterm"
 ubuntu = "N/A"
+
+[kitty]
+macos = "brew install --cask kitty"
+arch  = "pacman -S kitty"
+ubuntu = "apt install kitty"
 
 [gobuster]
 macos = "brew install gobuster"

@@ -1,4 +1,9 @@
-# Use custom symbols (Nerd Font required)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+command_timeout = 10000
+
 format = """$directory$fill$git_branch$git_status$cmd_duration$package$nodejs$python$docker_context
 $character"""
 

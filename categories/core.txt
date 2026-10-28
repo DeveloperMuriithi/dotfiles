@@ -3,3 +3,6 @@ git
 stow
 curl
 wget
+# Starship is required on every terminal; eza powers the ls aliases.
+starship
+eza

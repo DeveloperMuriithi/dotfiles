@@ -10,7 +10,7 @@ config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.check_for_updates = false
 
-config.font = wezterm.font("JetBrains Mono", { weight = "Bold" })
+config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "Bold" })
 config.font_size = 12.5
 
 config.enable_tab_bar = false
@@ -33,34 +33,34 @@ config.window_background_opacity = 0.75
 config.macos_window_background_blur = 25
 config.text_background_opacity = 0.85
 
+-- n1ghtw1ng "hacker" palette, shared with Starship, fish, and kitty.
 config.colors = {
-  foreground = "#00ff9c",
+  foreground = "#E6EDF3",
   background = "#000000",
-  cursor_bg = "#00ff9c",
-  cursor_border = "#00ff9c",
+  cursor_bg = "#00FF87",
+  cursor_border = "#00FF87",
   cursor_fg = "#000000",
-  selection_bg = "#003300",
-  selection_fg = "#00ff9c",
+  selection_bg = "#1F2933",
+  selection_fg = "#E6EDF3",
   ansi = {
-    "#000000",  -- black
-    "#ff5555",  -- red (wrong commands)
-    "#00ff9c",  -- green (valid commands)
-    "#00ffff",  -- yellow / options
-    "#00ff00",  -- blue / directories
-    "#ff00ff",  -- magenta
-    "#00ffff",  -- cyan / paths
-    "#ffffff",  -- white
+    "#1F2933", -- black
+    "#FF5F56", -- red
+    "#00FF87", -- green
+    "#FFD75F", -- yellow
+    "#00D9FF", -- blue
+    "#D787FF", -- magenta
+    "#00D9FF", -- cyan
+    "#E6EDF3", -- white
   },
-
   brights = {
-    "#003300",
-    "#ff6666",  -- bright red
-    "#00ffcc",
-    "#00ffff",
-    "#00ff66",
-    "#ff66ff",
-    "#66ffff",
-    "#ffffff",
+    "#7F8C8D", -- bright black
+    "#FF5F56", -- bright red
+    "#00FF87", -- bright green
+    "#FFD75F", -- bright yellow
+    "#00D9FF", -- bright blue
+    "#D787FF", -- bright magenta
+    "#00D9FF", -- bright cyan
+    "#FFFFFF", -- bright white
   },
 }
 

@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-set -e
+# Arch Linux bootstrap.
+set -euo pipefail
+
+DRY_RUN=false
+[[ "${1:-}" == "--dry-run" ]] && DRY_RUN=true
+
+if [[ "$DRY_RUN" == true ]]; then
+  echo "  [DRY RUN] sudo pacman -Syu --noconfirm"
+  echo "  [DRY RUN] sudo pacman -S --needed --noconfirm git stow curl wget"
+  exit 0
+fi
 
 echo "Installing Arch packages via pacman..."
 
@@ -10,25 +20,8 @@ sudo pacman -Syu --noconfirm
 echo "Installing system essentials..."
 sudo pacman -S --needed --noconfirm git stow curl wget
 
-# Loop through resources.txt
-while IFS=: read -r app macOS_cmd Arch_cmd; do
-  # Skip empty lines
-  [[ -z "$app" ]] && continue
-  [[ "$Arch_cmd" == "N/A" ]] && continue
-
-  cmd="$Arch_cmd"
-
-  # Wrap pacman installs
-  if [[ "$cmd" =~ "pacman -S" ]]; then
-    cmd="${cmd//pacman -S/pacman -S --needed --noconfirm}"
-  fi
-
-  # Wrap yay installs
-  if [[ "$cmd" =~ "yay -S" ]]; then
-    cmd="${cmd//yay -S/yay -S --needed --noconfirm}"
-  fi
-
-  echo "[RUN] $cmd"
-  eval "$cmd"
-
-done <~/dotfiles/resources.toml
+# AUR helper is needed for the yay entries in resources.toml. Do not install
+# one automatically; just make the limitation visible.
+if ! command -v yay >/dev/null 2>&1; then
+  echo "  ⚠ yay not found — AUR packages will fail until an AUR helper is installed."
+fi
